@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="CardMovieCollectionViewCell" customModule="AlfaFlix" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="307" height="177"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="307" height="177"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vOt-tn-Mmg">
+                        <rect key="frame" x="0.0" y="0.0" width="307" height="177"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Q7d-yM-kWK">
+                                <rect key="frame" x="0.0" y="0.0" width="307" height="177"/>
+                                <color key="backgroundColor" name="AlfaGrayDark"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" name="AlfaBlack"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="Q7d-yM-kWK" secondAttribute="trailing" id="FZg-9j-Gkr"/>
+                            <constraint firstItem="Q7d-yM-kWK" firstAttribute="leading" secondItem="vOt-tn-Mmg" secondAttribute="leading" id="Jt5-MM-3NG"/>
+                            <constraint firstItem="Q7d-yM-kWK" firstAttribute="top" secondItem="vOt-tn-Mmg" secondAttribute="top" id="k9v-As-GOr"/>
+                            <constraint firstAttribute="bottom" secondItem="Q7d-yM-kWK" secondAttribute="bottom" id="qSR-dE-rdK"/>
+                        </constraints>
+                    </view>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="vOt-tn-Mmg" secondAttribute="trailing" id="Eaa-RF-cLz"/>
+                <constraint firstAttribute="bottom" secondItem="vOt-tn-Mmg" secondAttribute="bottom" id="Gt4-ZZ-nY5"/>
+                <constraint firstItem="vOt-tn-Mmg" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="ZTH-kE-o3E"/>
+                <constraint firstItem="vOt-tn-Mmg" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="wmb-sy-rra"/>
+            </constraints>
+            <size key="customSize" width="307" height="177"/>
+            <connections>
+                <outlet property="containerView" destination="vOt-tn-Mmg" id="twS-0D-Ql5"/>
+                <outlet property="contentImageView" destination="Q7d-yM-kWK" id="TBr-No-wH9"/>
+            </connections>
+            <point key="canvasLocation" x="174.80916030534351" y="64.436619718309856"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <namedColor name="AlfaBlack">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="AlfaGrayDark">
+            <color red="0.16470588235294117" green="0.16470588235294117" blue="0.16470588235294117" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>
