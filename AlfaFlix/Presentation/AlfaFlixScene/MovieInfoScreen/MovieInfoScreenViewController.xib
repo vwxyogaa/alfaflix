@@ -12,7 +12,6 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MovieInfoScreenViewController" customModule="AlfaFlix" customModuleProvider="target">
             <connections>
                 <outlet property="castCollectionView" destination="zlx-aO-WKG" id="USR-H6-56s"/>
-                <outlet property="castCollectionViewHeight" destination="4n2-lO-TAZ" id="G0O-pj-UUR"/>
                 <outlet property="castStackView" destination="MVr-gp-con" id="GM4-vX-S3l"/>
                 <outlet property="categoriesLabel" destination="dcr-z4-20X" id="K9e-kG-5Gs"/>
                 <outlet property="closeButton" destination="JGp-JX-COV" id="5IM-cw-yCS"/>
@@ -21,10 +20,8 @@
                 <outlet property="genresLabel" destination="Rhu-ud-aLN" id="ViF-7X-UAh"/>
                 <outlet property="overviewLabel" destination="IOW-Ce-OFs" id="sa4-Xx-JaU"/>
                 <outlet property="recommendationsCollectionView" destination="OC9-uc-euU" id="iHB-Ia-00Z"/>
-                <outlet property="recommendationsCollectionViewHeight" destination="O5a-ZJ-8fK" id="Ilh-zf-uRk"/>
                 <outlet property="recommendationsStackView" destination="8qf-u0-fXj" id="RxA-Eh-pfF"/>
                 <outlet property="reviewsCollectionView" destination="nge-1K-ZTY" id="Pq3-Dm-iwA"/>
-                <outlet property="reviewsCollectionViewHeight" destination="nyj-yo-YSf" id="Igb-eU-ZXr"/>
                 <outlet property="reviewsStackView" destination="Uam-7R-4t9" id="yNm-MG-5UG"/>
                 <outlet property="taglineLabel" destination="My1-cD-6Fe" id="Sk5-Eg-4R8"/>
                 <outlet property="titleLabel" destination="wla-a0-6IK" id="ldN-PO-sUo"/>

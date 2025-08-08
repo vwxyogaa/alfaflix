@@ -23,13 +23,10 @@ class MovieInfoScreenViewController: BaseViewController {
     @IBOutlet weak var countriesProdLabel: UILabel!
     @IBOutlet weak var castStackView: UIStackView!
     @IBOutlet weak var castCollectionView: UICollectionView!
-    @IBOutlet weak var castCollectionViewHeight: NSLayoutConstraint!
     @IBOutlet weak var reviewsStackView: UIStackView!
     @IBOutlet weak var reviewsCollectionView: UICollectionView!
-    @IBOutlet weak var reviewsCollectionViewHeight: NSLayoutConstraint!
     @IBOutlet weak var recommendationsStackView: UIStackView!
     @IBOutlet weak var recommendationsCollectionView: UICollectionView!
-    @IBOutlet weak var recommendationsCollectionViewHeight: NSLayoutConstraint!
     
     // MARK: - Properties
     private let disposeBag = DisposeBag()
@@ -48,9 +45,6 @@ class MovieInfoScreenViewController: BaseViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        castCollectionViewHeight.constant = castCollectionView.frame.height
-        reviewsCollectionViewHeight.constant = reviewsCollectionView.frame.height
-        recommendationsCollectionViewHeight.constant = recommendationsCollectionView.frame.height
         trailerPlayerLayer?.frame = trailerContainerView.bounds
         trailerWebView?.frame = trailerContainerView.bounds
     }
@@ -324,19 +318,18 @@ extension MovieInfoScreenViewController: UICollectionViewDataSource, UICollectio
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let spacing: CGFloat = 8
+        let peek: CGFloat = 20
         switch collectionView {
-        case castCollectionView:
-            let width = castCollectionView.frame.width / 3.6
-            let height = castCollectionView.frame.height
-            return CGSize(width: width, height: height)
+        case castCollectionView, recommendationsCollectionView:
+            let availableWidth = collectionView.bounds.width
+            let itemWidth = (availableWidth - (2 * spacing + peek)) / 3
+            let itemHeight = collectionView.bounds.height
+            return CGSize(width: floor(itemWidth), height: itemHeight)
         case reviewsCollectionView:
-            let width = reviewsCollectionView.frame.width
-            let height = reviewsCollectionView.frame.height
-            return CGSize(width: width, height: height)
-        case recommendationsCollectionView:
-            let width = recommendationsCollectionView.frame.width / 3.6
-            let height = recommendationsCollectionView.frame.height
-            return CGSize(width: width, height: height)
+            let availableWidth = collectionView.bounds.width
+            let itemWidth = availableWidth - (peek + spacing)
+            return CGSize(width: floor(itemWidth), height: collectionView.bounds.height)
         default:
             return .zero
         }

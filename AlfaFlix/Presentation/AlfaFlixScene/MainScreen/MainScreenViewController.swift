@@ -29,10 +29,14 @@ class MainScreenViewController: BaseViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         if let layout = nowPlayingCollectionView.collectionViewLayout as? CenteredCollectionViewFlowLayout {
-            let width  = nowPlayingCollectionView.bounds.width * 0.9
+            let spacing: CGFloat = 0
+            let peek: CGFloat = 20
+            let collectionWidth = nowPlayingCollectionView.bounds.width
+            let width  = collectionWidth - 2 * (peek + spacing)
             let height = nowPlayingCollectionView.bounds.height
-            layout.itemSize = CGSize(width: width, height: height)
-            layout.minimumLineSpacing = 0
+            layout.minimumLineSpacing = spacing
+            layout.sectionInset = .zero
+            layout.itemSize = CGSize(width: floor(width), height: height)
             layout.invalidateLayout()
         }
     }
@@ -193,19 +197,16 @@ extension MainScreenViewController: UICollectionViewDataSource, UICollectionView
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let spacing: CGFloat = 8
+        let peek: CGFloat = 20
         switch collectionView {
         case nowPlayingCollectionView:
-            let width = nowPlayingCollectionView.frame.width * 0.9
-            let height = nowPlayingCollectionView.frame.height
-            return CGSize(width: width, height: height)
-        case popularCollectionView:
-            let width = popularCollectionView.frame.width / 3.6
-            let height = popularCollectionView.frame.height
-            return CGSize(width: width, height: height)
-        case topRatedCollectionView:
-            let width = topRatedCollectionView.frame.width / 3.6
-            let height = topRatedCollectionView.frame.height
-            return CGSize(width: width, height: height)
+            return (collectionViewLayout as? UICollectionViewFlowLayout)?.itemSize ?? .zero
+        case popularCollectionView, topRatedCollectionView:
+            let availableWidth = collectionView.bounds.width
+            let itemWidth = (availableWidth - (2 * spacing + peek)) / 3
+            let itemHeight = collectionView.bounds.height
+            return CGSize(width: floor(itemWidth), height: itemHeight)
         default:
             return .zero
         }
