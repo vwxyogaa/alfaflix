@@ -28,14 +28,27 @@ class MainScreenViewController: BaseViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
         if let layout = nowPlayingCollectionView.collectionViewLayout as? CenteredCollectionViewFlowLayout {
-            let width  = nowPlayingCollectionView.bounds.width * 0.9
+            let spacing: CGFloat = 0
+            let peek: CGFloat = 20
+            let collectionWidth = nowPlayingCollectionView.bounds.width
+            let width  = collectionWidth - 2 * (peek + spacing)
             let height = nowPlayingCollectionView.bounds.height
-            layout.itemSize = CGSize(width: width, height: height)
-            layout.minimumLineSpacing = 0
+            layout.minimumLineSpacing = spacing
+            layout.sectionInset = .zero
+            layout.itemSize = CGSize(width: floor(width), height: height)
             layout.invalidateLayout()
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
     // MARK: - Observe
@@ -122,8 +135,8 @@ class MainScreenViewController: BaseViewController {
     }
 }
 
-// MARK: - UICollectionViewDataSource, UICollectionViewDelegate
-extension MainScreenViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+// MARK: - UICollectionViewDataSource, UICollectionViewDelegateFlowLayout
+extension MainScreenViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         guard let viewModel else { return 0 }
         switch collectionView {
@@ -161,20 +174,39 @@ extension MainScreenViewController: UICollectionViewDataSource, UICollectionView
         }
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         switch collectionView {
         case nowPlayingCollectionView:
-            let width = nowPlayingCollectionView.frame.width * 0.9
-            let height = nowPlayingCollectionView.frame.height
-            return CGSize(width: width, height: height)
+            let movieInfoScreenViewController = MovieInfoScreenViewController()
+            let movieInfoScreenViewModel = MovieInfoScreenViewModel(movieInfoScreenUseCase: Injection().provideMovieInfoScreenUseCase(), idMovie: viewModel?.nowPlayingResults?[indexPath.row].id)
+            movieInfoScreenViewController.viewModel = movieInfoScreenViewModel
+            navigationController?.pushViewController(movieInfoScreenViewController, animated: true)
         case popularCollectionView:
-            let width = popularCollectionView.frame.width / 3.6
-            let height = popularCollectionView.frame.height
-            return CGSize(width: width, height: height)
+            let movieInfoScreenViewController = MovieInfoScreenViewController()
+            let movieInfoScreenViewModel = MovieInfoScreenViewModel(movieInfoScreenUseCase: Injection().provideMovieInfoScreenUseCase(), idMovie: viewModel?.popularResults?[indexPath.row].id)
+            movieInfoScreenViewController.viewModel = movieInfoScreenViewModel
+            navigationController?.pushViewController(movieInfoScreenViewController, animated: true)
         case topRatedCollectionView:
-            let width = topRatedCollectionView.frame.width / 3.6
-            let height = topRatedCollectionView.frame.height
-            return CGSize(width: width, height: height)
+            let movieInfoScreenViewController = MovieInfoScreenViewController()
+            let movieInfoScreenViewModel = MovieInfoScreenViewModel(movieInfoScreenUseCase: Injection().provideMovieInfoScreenUseCase(), idMovie: viewModel?.topRatedResults?[indexPath.row].id)
+            movieInfoScreenViewController.viewModel = movieInfoScreenViewModel
+            navigationController?.pushViewController(movieInfoScreenViewController, animated: true)
+        default:
+            break
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let spacing: CGFloat = 8
+        let peek: CGFloat = 20
+        switch collectionView {
+        case nowPlayingCollectionView:
+            return (collectionViewLayout as? UICollectionViewFlowLayout)?.itemSize ?? .zero
+        case popularCollectionView, topRatedCollectionView:
+            let availableWidth = collectionView.bounds.width
+            let itemWidth = (availableWidth - (2 * spacing + peek)) / 3
+            let itemHeight = collectionView.bounds.height
+            return CGSize(width: floor(itemWidth), height: itemHeight)
         default:
             return .zero
         }

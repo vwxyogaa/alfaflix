@@ -31,4 +31,9 @@ class CardMovieCollectionViewCell: UICollectionViewCell {
     func configureContentDashboard(content: TMDBResponse.Results?) {
         contentImageView.loadImage(uri: content?.posterPathImage)
     }
+    
+    
+    func configureContentRecommendations(content: RecommendationsResponse.Result?) {
+        contentImageView.loadImage(uri: content?.posterPathImage)
+    }
 }
