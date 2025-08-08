@@ -22,14 +22,14 @@ final class MainScreenUseCase: MainScreenUseCaseProtocol {
     }
     
     func getNowPlaying(page: Int) -> Observable<TMDBResponse> {
-        return self.repository.getNowPlaying(page: page)
+        return repository.getNowPlaying(page: page)
     }
     
     func getPopular(page: Int) -> Observable<TMDBResponse> {
-        return self.repository.getPopular(page: page)
+        return repository.getPopular(page: page)
     }
     
     func getTopRated(page: Int) -> Observable<TMDBResponse> {
-        return self.repository.getTopRated(page: page)
+        return repository.getTopRated(page: page)
     }
 }

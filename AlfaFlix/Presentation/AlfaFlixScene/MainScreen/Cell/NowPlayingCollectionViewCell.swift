@@ -32,6 +32,6 @@ class NowPlayingCollectionViewCell: UICollectionViewCell {
     }
     
     func configureContent(nowPlaying: TMDBResponse.Results?) {
-        self.nowPlayingImageView.loadImage(uri: nowPlaying?.posterPathImage)
+        nowPlayingImageView.loadImage(uri: nowPlaying?.posterPathImage)
     }
 }

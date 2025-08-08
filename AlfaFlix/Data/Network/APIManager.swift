@@ -14,7 +14,8 @@ final class APIManager {
     private let apiReadAccessToken = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzZmY5NzkxOTYzNGNhYjkyMmMyOTVmMmQ5YjVmZjY0YSIsInN1YiI6IjY0MDk4NTVjZjlhM2ZiMDA3YWZhOTJmYSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.yzIluEWS7mkD_UtYhRvhd6ZSGYAz-eKa8hAQrxTavPk"
     
     func executeQuery<T> (url: URL, method: HTTPMethod, params: Parameters? = nil) -> Observable<T> where T: Decodable {
-        return Observable<T>.create { observer in
+        return Observable<T>.create { [weak self] observer in
+            guard let self else { return Disposables.create() }
             let headers: HTTPHeaders = [
                 "Authorization": "Bearer \(self.apiReadAccessToken)",
                 "Content-Type": "application/json;charset=utf-8"

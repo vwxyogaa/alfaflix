@@ -58,7 +58,7 @@ class MainScreenViewModel: BaseViewModel {
 // MARK: - Now Playing
 extension MainScreenViewModel {
     func getNowPlaying() {
-        self.setLoading(loading: true)
+        setLoading(loading: true)
         mainScreenUseCase.getNowPlaying(page: 1)
             .subscribe { [weak self] result in
                 guard let self,
@@ -77,7 +77,7 @@ extension MainScreenViewModel {
 // MARK: - Popular
 extension MainScreenViewModel {
     func getPopular() {
-        self.setLoading(loading: true)
+        setLoading(loading: true)
         mainScreenUseCase.getPopular(page: 1)
             .subscribe { [weak self] result in
                 guard let self,
@@ -96,7 +96,7 @@ extension MainScreenViewModel {
 // MARK: - Top Rated
 extension MainScreenViewModel {
     func getTopRated() {
-        self.setLoading(loading: true)
+        setLoading(loading: true)
         mainScreenUseCase.getTopRated(page: 1)
             .subscribe { [weak self] result in
                 guard let self,
