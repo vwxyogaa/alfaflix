@@ -32,6 +32,43 @@ class MovieInfoScreenViewModel: BaseViewModel {
         self.idMovie = idMovie
         super.init()
     }
+    
+    func loadAll(id: Int) {
+        setLoading(loading: true)
+        
+        let detail = movieInfoScreenUseCase.getDetail(id: id).asSingle()
+        let credits = movieInfoScreenUseCase.getCredits(id: id).asSingle()
+        let reviews = movieInfoScreenUseCase.getReviews(id: id).asSingle()
+        let recommendations = movieInfoScreenUseCase.getRecommendations(id: id).asSingle()
+        let videos   = movieInfoScreenUseCase.getVideos(id: id).asSingle()
+        
+        Single.zip(detail, credits, reviews, recommendations, videos)
+            .observe(on: MainScheduler.instance)
+            .subscribe(onSuccess: { [weak self] detail, credits, reviews, recommendations, videos in
+                guard let self else { return }
+                
+                self.movieResults = detail
+                self.movie.onNext(detail)
+                
+                self.castsResults = credits?.cast
+                self.casts.onNext(credits?.cast)
+                
+                self.reviewsResults = reviews?.results
+                self.reviews.onNext(reviews?.results)
+                
+                self.recommendationsResults = recommendations?.results
+                self.recommendations.onNext(recommendations?.results)
+                
+                self.videosResults = videos?.results
+                self.videos.onNext(videos?.results)
+                
+                self.setLoading(loading: false)
+            }, onFailure: { [weak self] error in
+                guard let self else { return }
+                self.setLoading(loading: false)
+                self.setError(message: error.localizedDescription)
+            }).disposed(by: disposeBag)
+    }
 }
 
 // MARK: - Videos

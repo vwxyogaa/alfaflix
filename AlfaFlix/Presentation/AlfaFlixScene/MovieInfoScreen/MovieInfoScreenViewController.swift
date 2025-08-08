@@ -12,6 +12,7 @@ import WebKit
 
 class MovieInfoScreenViewController: BaseViewController {
     // MARK: - IBOutlets
+    @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var trailerContainerView: UIView!
     @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var titleLabel: UILabel!
@@ -76,6 +77,7 @@ class MovieInfoScreenViewController: BaseViewController {
             .subscribe(onNext: { [weak self] isLoading in
                 guard let self else { return }
                 self.manageLoadingActivity(isLoading: isLoading)
+                self.containerView.isHidden = isLoading
             }).disposed(by: disposeBag)
         
         viewModel.errorMessage
@@ -227,14 +229,9 @@ class MovieInfoScreenViewController: BaseViewController {
     }
     
     private func loadData() {
-        guard let viewModel else { return }
-        if let id = viewModel.idMovie {
-            viewModel.getDetail(id: id)
-            viewModel.getCredits(id: id)
-            viewModel.getReviews(id: id)
-            viewModel.getRecommendations(id: id)
-            viewModel.getVideos(id: id)
-        }
+        guard let viewModel = viewModel,
+              let idMovie = viewModel.idMovie else { return }
+        viewModel.loadAll(id: idMovie)
     }
     
     private func embedYouTube(key: String) {
