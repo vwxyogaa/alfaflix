@@ -24,3 +24,9 @@ extension RecommendationsResponse.Result {
         }
     }
 }
+
+enum MovieFeed {
+    case nowPlaying
+    case popular
+    case topRated
+}

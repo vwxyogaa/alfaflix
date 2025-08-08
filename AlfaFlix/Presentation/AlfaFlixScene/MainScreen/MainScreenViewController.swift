@@ -115,9 +115,7 @@ class MainScreenViewController: BaseViewController {
     
     private func loadData() {
         guard let viewModel else { return }
-        viewModel.getNowPlaying()
-        viewModel.getPopular()
-        viewModel.getTopRated()
+        viewModel.resetAndLoadFirstPages()
     }
     
     private func configureCollectionViews() {
@@ -141,11 +139,11 @@ extension MainScreenViewController: UICollectionViewDataSource, UICollectionView
         guard let viewModel else { return 0 }
         switch collectionView {
         case nowPlayingCollectionView:
-            return viewModel.nowPlayingResults?.count ?? 0
+            return viewModel.nowPlayingResults.count
         case popularCollectionView:
-            return viewModel.popularResults?.count ?? 0
+            return viewModel.popularResults.count
         case topRatedCollectionView:
-            return viewModel.topRatedResults?.count ?? 0
+            return viewModel.topRatedResults.count
         default:
             return 0
         }
@@ -156,17 +154,17 @@ extension MainScreenViewController: UICollectionViewDataSource, UICollectionView
         switch collectionView {
         case nowPlayingCollectionView:
             guard let cell = nowPlayingCollectionView.dequeueReusableCell(withReuseIdentifier: NowPlayingCollectionViewCell.identifier, for: indexPath) as? NowPlayingCollectionViewCell else { return UICollectionViewCell() }
-            let nowPlaying = viewModel.nowPlayingResults?[indexPath.row]
+            let nowPlaying = viewModel.nowPlayingResults[indexPath.row]
             cell.configureContent(nowPlaying: nowPlaying)
             return cell
         case popularCollectionView:
             guard let cell = popularCollectionView.dequeueReusableCell(withReuseIdentifier: CardMovieCollectionViewCell.identifier, for: indexPath) as? CardMovieCollectionViewCell else { return UICollectionViewCell() }
-            let popular = viewModel.popularResults?[indexPath.row]
+            let popular = viewModel.popularResults[indexPath.row]
             cell.configureContentDashboard(content: popular)
             return cell
         case topRatedCollectionView:
             guard let cell = topRatedCollectionView.dequeueReusableCell(withReuseIdentifier: CardMovieCollectionViewCell.identifier, for: indexPath) as? CardMovieCollectionViewCell else { return UICollectionViewCell() }
-            let topRated = viewModel.topRatedResults?[indexPath.row]
+            let topRated = viewModel.topRatedResults[indexPath.row]
             cell.configureContentDashboard(content: topRated)
             return cell
         default:
@@ -178,17 +176,17 @@ extension MainScreenViewController: UICollectionViewDataSource, UICollectionView
         switch collectionView {
         case nowPlayingCollectionView:
             let movieInfoScreenViewController = MovieInfoScreenViewController()
-            let movieInfoScreenViewModel = MovieInfoScreenViewModel(movieInfoScreenUseCase: Injection().provideMovieInfoScreenUseCase(), idMovie: viewModel?.nowPlayingResults?[indexPath.row].id)
+            let movieInfoScreenViewModel = MovieInfoScreenViewModel(movieInfoScreenUseCase: Injection().provideMovieInfoScreenUseCase(), idMovie: viewModel?.nowPlayingResults[indexPath.row].id)
             movieInfoScreenViewController.viewModel = movieInfoScreenViewModel
             navigationController?.pushViewController(movieInfoScreenViewController, animated: true)
         case popularCollectionView:
             let movieInfoScreenViewController = MovieInfoScreenViewController()
-            let movieInfoScreenViewModel = MovieInfoScreenViewModel(movieInfoScreenUseCase: Injection().provideMovieInfoScreenUseCase(), idMovie: viewModel?.popularResults?[indexPath.row].id)
+            let movieInfoScreenViewModel = MovieInfoScreenViewModel(movieInfoScreenUseCase: Injection().provideMovieInfoScreenUseCase(), idMovie: viewModel?.popularResults[indexPath.row].id)
             movieInfoScreenViewController.viewModel = movieInfoScreenViewModel
             navigationController?.pushViewController(movieInfoScreenViewController, animated: true)
         case topRatedCollectionView:
             let movieInfoScreenViewController = MovieInfoScreenViewController()
-            let movieInfoScreenViewModel = MovieInfoScreenViewModel(movieInfoScreenUseCase: Injection().provideMovieInfoScreenUseCase(), idMovie: viewModel?.topRatedResults?[indexPath.row].id)
+            let movieInfoScreenViewModel = MovieInfoScreenViewModel(movieInfoScreenUseCase: Injection().provideMovieInfoScreenUseCase(), idMovie: viewModel?.topRatedResults[indexPath.row].id)
             movieInfoScreenViewController.viewModel = movieInfoScreenViewModel
             navigationController?.pushViewController(movieInfoScreenViewController, animated: true)
         default:
@@ -218,6 +216,30 @@ extension MainScreenViewController: UICollectionViewDataSource, UICollectionView
             return 8
         default:
             return 0
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        guard let viewModel = viewModel else { return }
+        let threshold = 2
+        switch collectionView {
+        case nowPlayingCollectionView:
+            let total = viewModel.nowPlayingResults.count
+            if indexPath.item >= total - threshold {
+                viewModel.loadNext(feed: .nowPlaying)
+            }
+        case popularCollectionView:
+            let total = viewModel.popularResults.count
+            if indexPath.item >= total - threshold {
+                viewModel.loadNext(feed: .popular)
+            }
+        case topRatedCollectionView:
+            let total = viewModel.topRatedResults.count
+            if indexPath.item >= total - threshold {
+                viewModel.loadNext(feed: .topRated)
+            }
+        default:
+            break
         }
     }
 }

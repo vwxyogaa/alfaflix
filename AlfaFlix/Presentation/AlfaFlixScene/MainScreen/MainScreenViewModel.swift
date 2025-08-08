@@ -16,14 +16,18 @@ class MainScreenViewModel: BaseViewModel {
     private var autoScrollTimer: Timer?
     private var totalItems: Int = 0
     private var currentIndex: Int = 0
-    var nowPlayingResults: [TMDBResponse.Results]?
-    var popularResults: [TMDBResponse.Results]?
-    var topRatedResults: [TMDBResponse.Results]?
+    var nowPlayingResults: [TMDBResponse.Results] = []
+    var popularResults: [TMDBResponse.Results] = []
+    var topRatedResults: [TMDBResponse.Results] = []
     
     let autoScrollIndex = PublishSubject<Int>()
     let nowPlayings = PublishSubject<[TMDBResponse.Results]?>()
     let populars = PublishSubject<[TMDBResponse.Results]?>()
     let topRateds = PublishSubject<[TMDBResponse.Results]?>()
+    
+    private var page: [MovieFeed: Int] = [.nowPlaying: 1, .popular: 1, .topRated: 1]
+    private var isLoadingPage: [MovieFeed: Bool] = [.nowPlaying: false, .popular: false, .topRated: false]
+    private var hasMoreData: [MovieFeed: Bool] = [.nowPlaying: true, .popular: true, .topRated: true]
     
     // MARK: - Lifecycles
     init(mainScreenUseCase: MainScreenUseCaseProtocol) {
@@ -34,6 +38,72 @@ class MainScreenViewModel: BaseViewModel {
     // MARK: - Methods
     func setTotalItems(count: Int) {
         totalItems = count
+    }
+    
+    func resetAndLoadFirstPages() {
+        nowPlayingResults.removeAll()
+        popularResults.removeAll()
+        topRatedResults.removeAll()
+        
+        page = [.nowPlaying: 1, .popular: 1, .topRated: 1]
+        hasMoreData = [.nowPlaying: true, .popular: true, .topRated: true]
+        isLoadingPage = [.nowPlaying: false, .popular: false, .topRated: false]
+        
+        loadNext(feed: .nowPlaying)
+        loadNext(feed: .popular)
+        loadNext(feed: .topRated)
+    }
+    
+    func loadNext(feed: MovieFeed) {
+        if isLoadingPage[feed] == true || hasMoreData[feed] == false { return }
+        
+        let nextPage = page[feed] ?? 1
+        isLoadingPage[feed] = true
+        setLoading(loading: true)
+        
+        let source: Observable<TMDBResponse?>
+        switch feed {
+        case .nowPlaying:
+            source = mainScreenUseCase.getNowPlaying(page: nextPage)
+        case .popular:
+            source = mainScreenUseCase.getPopular(page: nextPage)
+        case .topRated:
+            source = mainScreenUseCase.getTopRated(page: nextPage)
+        }
+        
+        source
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] response in
+                guard let self else { return }
+                self.setLoading(loading: false)
+                self.isLoadingPage[feed] = false
+                
+                let newItems = response?.results ?? []
+                if newItems.isEmpty {
+                    self.hasMoreData[feed] = false
+                    return
+                }
+                
+                switch feed {
+                case .nowPlaying:
+                    self.nowPlayingResults.append(contentsOf: newItems)
+                    self.totalItems = self.nowPlayingResults.count
+                    self.nowPlayings.onNext(self.nowPlayingResults)
+                case .popular:
+                    self.popularResults.append(contentsOf: newItems)
+                    self.populars.onNext(self.popularResults)
+                case .topRated:
+                    self.topRatedResults.append(contentsOf: newItems)
+                    self.topRateds.onNext(self.topRatedResults)
+                }
+                
+                self.page[feed] = nextPage + 1
+            }, onError: { [weak self] error in
+                guard let self else { return }
+                self.setLoading(loading: false)
+                self.isLoadingPage[feed] = false
+                self.setError(message: error.localizedDescription)
+            }).disposed(by: disposeBag)
     }
     
     func startAutoScroll(interval: TimeInterval = 3.0) {
