@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RxSwift
 
 class MainScreenViewController: UIViewController {
     // MARK: - IBOutlets
@@ -13,20 +14,58 @@ class MainScreenViewController: UIViewController {
     @IBOutlet weak var popularCollectionView: UICollectionView!
     @IBOutlet weak var topRatedCollectionView: UICollectionView!
     
+    // MARK: Properties
+    private let disposeBag = DisposeBag()
+    private let viewModel = MainScreenViewModel()
+    
     // MARK: - Lifecycles
     override func viewDidLoad() {
         super.viewDidLoad()
         configureViews()
+        initObserve()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        viewModel.startAutoScroll()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        viewModel.stopAutoScroll()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        if let layout = nowPlayingCollectionView.collectionViewLayout as? CenteredCollectionViewFlowLayout {
+            let width  = nowPlayingCollectionView.bounds.width * 0.9
+            let height = nowPlayingCollectionView.bounds.height
+            layout.itemSize = CGSize(width: width, height: height)
+            layout.minimumLineSpacing = 0
+            layout.invalidateLayout()
+        }
+    }
+    
+    // MARK: - Observe
+    private func initObserve() {
+        viewModel.autoScrollIndex
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] index in
+                guard let self,
+                      let layout = self.nowPlayingCollectionView.collectionViewLayout as? CenteredCollectionViewFlowLayout else { return }
+                layout.scrollToPage(index: index, animated: true)
+            }).disposed(by: disposeBag)
     }
     
     // MARK: - Methods
     private func configureViews() {
         configureCollectionViews()
+        viewModel.setTotalItems(count: collectionView(nowPlayingCollectionView, numberOfItemsInSection: 0))
     }
     
     private func configureCollectionViews() {
         nowPlayingCollectionView.register(NowPlayingCollectionViewCell.nib, forCellWithReuseIdentifier: NowPlayingCollectionViewCell.identifier)
-        nowPlayingCollectionView.decelerationRate = .fast
         nowPlayingCollectionView.dataSource = self
         nowPlayingCollectionView.delegate = self
         
@@ -40,8 +79,8 @@ class MainScreenViewController: UIViewController {
     }
 }
 
-// MARK: - UICollectionViewDataSource, UICollectionViewDelegateFlowLayout
-extension MainScreenViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+// MARK: - UICollectionViewDataSource, UICollectionViewDelegate
+extension MainScreenViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch collectionView {
         case nowPlayingCollectionView:
@@ -86,17 +125,13 @@ extension MainScreenViewController: UICollectionViewDataSource, UICollectionView
             let height = topRatedCollectionView.frame.height
             return CGSize(width: width, height: height)
         default:
-            return CGSize(width: 0, height: 0)
+            return .zero
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         switch collectionView {
-        case nowPlayingCollectionView:
-            return 0
-        case popularCollectionView:
-            return 8
-        case topRatedCollectionView:
+        case popularCollectionView, topRatedCollectionView:
             return 8
         default:
             return 0

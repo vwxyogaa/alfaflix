@@ -11,7 +11,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MainScreenViewController" customModule="AlfaFlix" customModuleProvider="target">
             <connections>
-                <outlet property="nowPlayingCollectionView" destination="UT4-P9-gVA" id="697-au-w5R"/>
+                <outlet property="nowPlayingCollectionView" destination="UT4-P9-gVA" id="2V9-Uh-eIF"/>
                 <outlet property="popularCollectionView" destination="WX6-7a-cLK" id="Fpl-io-dbO"/>
                 <outlet property="topRatedCollectionView" destination="gbF-j1-iq7" id="n0e-Dg-xLo"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -34,12 +34,7 @@
                                     <constraints>
                                         <constraint firstAttribute="height" constant="500" id="EFU-aw-8v4"/>
                                     </constraints>
-                                    <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="mVq-3j-n19">
-                                        <size key="itemSize" width="128" height="128"/>
-                                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                    </collectionViewFlowLayout>
+                                    <collectionViewLayout key="collectionViewLayout" id="4aC-dQ-xtQ" customClass="CenteredCollectionViewFlowLayout" customModule="AlfaFlix" customModuleProvider="target"/>
                                 </collectionView>
                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="vPH-Bq-Z7L">
                                     <rect key="frame" x="0.0" y="516" width="361" height="370.66666666666674"/>
