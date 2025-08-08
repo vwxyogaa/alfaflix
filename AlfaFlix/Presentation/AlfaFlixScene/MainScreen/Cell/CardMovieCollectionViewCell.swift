@@ -27,4 +27,8 @@ class CardMovieCollectionViewCell: UICollectionViewCell {
         containerView.layer.cornerRadius = 16
         containerView.layer.masksToBounds = true
     }
+    
+    func configureContentDashboard(content: TMDBResponse.Results?) {
+        self.contentImageView.loadImage(uri: content?.posterPathImage)
+    }
 }

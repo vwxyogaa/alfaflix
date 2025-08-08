@@ -30,4 +30,8 @@ class NowPlayingCollectionViewCell: UICollectionViewCell {
         containerView.layer.masksToBounds = true
         nowPlayingImageView.layer.masksToBounds = true
     }
+    
+    func configureContent(nowPlaying: TMDBResponse.Results?) {
+        self.nowPlayingImageView.loadImage(uri: nowPlaying?.posterPathImage)
+    }
 }
