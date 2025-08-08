@@ -17,7 +17,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let mainScreenViewController = MainScreenViewController()
         let mainScreenViewModel = MainScreenViewModel(mainScreenUseCase: Injection().provideMainScreenUseCase())
         mainScreenViewController.viewModel = mainScreenViewModel
-        window.rootViewController = mainScreenViewController
+        let navMainScreenViewController = UINavigationController(rootViewController: mainScreenViewController)
+        navMainScreenViewController.navigationBar.prefersLargeTitles = false
+        window.rootViewController = navMainScreenViewController
         self.window = window
         window.makeKeyAndVisible()
     }

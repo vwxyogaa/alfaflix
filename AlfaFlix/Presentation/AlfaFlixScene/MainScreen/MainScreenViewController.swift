@@ -28,7 +28,6 @@ class MainScreenViewController: BaseViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
         if let layout = nowPlayingCollectionView.collectionViewLayout as? CenteredCollectionViewFlowLayout {
             let width  = nowPlayingCollectionView.bounds.width * 0.9
             let height = nowPlayingCollectionView.bounds.height
@@ -36,6 +35,16 @@ class MainScreenViewController: BaseViewController {
             layout.minimumLineSpacing = 0
             layout.invalidateLayout()
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
     // MARK: - Observe
@@ -122,8 +131,8 @@ class MainScreenViewController: BaseViewController {
     }
 }
 
-// MARK: - UICollectionViewDataSource, UICollectionViewDelegate
-extension MainScreenViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+// MARK: - UICollectionViewDataSource, UICollectionViewDelegateFlowLayout
+extension MainScreenViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         guard let viewModel else { return 0 }
         switch collectionView {
@@ -158,6 +167,28 @@ extension MainScreenViewController: UICollectionViewDataSource, UICollectionView
             return cell
         default:
             return UICollectionViewCell()
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        switch collectionView {
+        case nowPlayingCollectionView:
+            let movieInfoScreenViewController = MovieInfoScreenViewController()
+            let movieInfoScreenViewModel = MovieInfoScreenViewModel(movieInfoScreenUseCase: Injection().provideMovieInfoScreenUseCase(), idMovie: viewModel?.nowPlayingResults?[indexPath.row].id)
+            movieInfoScreenViewController.viewModel = movieInfoScreenViewModel
+            navigationController?.pushViewController(movieInfoScreenViewController, animated: true)
+        case popularCollectionView:
+            let movieInfoScreenViewController = MovieInfoScreenViewController()
+            let movieInfoScreenViewModel = MovieInfoScreenViewModel(movieInfoScreenUseCase: Injection().provideMovieInfoScreenUseCase(), idMovie: viewModel?.popularResults?[indexPath.row].id)
+            movieInfoScreenViewController.viewModel = movieInfoScreenViewModel
+            navigationController?.pushViewController(movieInfoScreenViewController, animated: true)
+        case topRatedCollectionView:
+            let movieInfoScreenViewController = MovieInfoScreenViewController()
+            let movieInfoScreenViewModel = MovieInfoScreenViewModel(movieInfoScreenUseCase: Injection().provideMovieInfoScreenUseCase(), idMovie: viewModel?.topRatedResults?[indexPath.row].id)
+            movieInfoScreenViewController.viewModel = movieInfoScreenViewModel
+            navigationController?.pushViewController(movieInfoScreenViewController, animated: true)
+        default:
+            break
         }
     }
     

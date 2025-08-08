@@ -7,7 +7,6 @@
 
 import Foundation
 import RxSwift
-import RxCocoa
 
 class MainScreenViewModel: BaseViewModel {
     // MARK: - Properties
@@ -62,7 +61,7 @@ extension MainScreenViewModel {
         mainScreenUseCase.getNowPlaying(page: 1)
             .subscribe { [weak self] result in
                 guard let self,
-                      let data = result.results else { return }
+                      let data = result?.results else { return }
                 self.setLoading(loading: false)
                 self.nowPlayingResults = data
                 self.nowPlayings.onNext(data)
@@ -81,7 +80,7 @@ extension MainScreenViewModel {
         mainScreenUseCase.getPopular(page: 1)
             .subscribe { [weak self] result in
                 guard let self,
-                      let data = result.results else { return }
+                      let data = result?.results else { return }
                 self.setLoading(loading: false)
                 self.popularResults = data
                 self.populars.onNext(data)
@@ -100,7 +99,7 @@ extension MainScreenViewModel {
         mainScreenUseCase.getTopRated(page: 1)
             .subscribe { [weak self] result in
                 guard let self,
-                      let data = result.results else { return }
+                      let data = result?.results else { return }
                 self.setLoading(loading: false)
                 self.topRatedResults = data
                 self.topRateds.onNext(data)

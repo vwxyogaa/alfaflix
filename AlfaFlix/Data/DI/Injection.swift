@@ -12,6 +12,11 @@ final class Injection {
         let repository = provideRepository()
         return MainScreenUseCase(repository: repository)
     }
+    
+    func provideMovieInfoScreenUseCase() -> MovieInfoScreenUseCaseProtocol {
+        let repository = provideRepository()
+        return MovieInfoScreenUseCase(repository: repository)
+    }
 }
 
 extension Injection {
