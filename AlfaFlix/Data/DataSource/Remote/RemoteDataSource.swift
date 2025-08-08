@@ -12,19 +12,19 @@ final class RemoteDataSource {
     private let urlMovie = Constants.baseMovieUrl + Constants.moviePath
     
     func getNowPlaying(page: Int) -> Observable<TMDBResponse> {
-        let url = URL(string: urlMovie + "/now_playing?page=\(page)")!
+        guard let url = URL(string: urlMovie + "/now_playing?page=\(page)") else { return Observable.error(URLError(.badURL)) }
         let data: Observable<TMDBResponse> = APIManager.shared.executeQuery(url: url, method: .get)
         return data
     }
     
     func getPopular(page: Int) -> Observable<TMDBResponse> {
-        let url = URL(string: urlMovie + "/popular?page=\(page)")!
+        guard let url = URL(string: urlMovie + "/popular?page=\(page)") else { return Observable.error(URLError(.badURL)) }
         let data: Observable<TMDBResponse> = APIManager.shared.executeQuery(url: url, method: .get)
         return data
     }
     
     func getTopRated(page: Int) -> Observable<TMDBResponse> {
-        let url = URL(string: urlMovie + "/top_rated?page=\(page)")!
+        guard let url = URL(string: urlMovie + "/top_rated?page=\(page)") else { return Observable.error(URLError(.badURL)) }
         let data: Observable<TMDBResponse> = APIManager.shared.executeQuery(url: url, method: .get)
         return data
     }
