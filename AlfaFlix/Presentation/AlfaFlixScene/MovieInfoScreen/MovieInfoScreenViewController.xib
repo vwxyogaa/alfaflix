@@ -28,6 +28,7 @@
                 <outlet property="reviewsStackView" destination="Uam-7R-4t9" id="yNm-MG-5UG"/>
                 <outlet property="taglineLabel" destination="My1-cD-6Fe" id="Sk5-Eg-4R8"/>
                 <outlet property="titleLabel" destination="wla-a0-6IK" id="ldN-PO-sUo"/>
+                <outlet property="trailerContainerView" destination="HHg-5u-BSR" id="zVd-s8-2YG"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>

@@ -7,9 +7,12 @@
 
 import UIKit
 import RxSwift
+import AVKit
+import WebKit
 
 class MovieInfoScreenViewController: BaseViewController {
     // MARK: - IBOutlets
+    @IBOutlet weak var trailerContainerView: UIView!
     @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var categoriesLabel: UILabel!
@@ -31,6 +34,9 @@ class MovieInfoScreenViewController: BaseViewController {
     // MARK: - Properties
     private let disposeBag = DisposeBag()
     var viewModel: MovieInfoScreenViewModel?
+    private var trailerVideoPlayer: AVPlayer?
+    private var trailerPlayerLayer: AVPlayerLayer?
+    private var trailerWebView: WKWebView?
     
     // MARK: - Lifecycles
     override func viewDidLoad() {
@@ -45,6 +51,8 @@ class MovieInfoScreenViewController: BaseViewController {
         castCollectionViewHeight.constant = castCollectionView.frame.height
         reviewsCollectionViewHeight.constant = reviewsCollectionView.frame.height
         recommendationsCollectionViewHeight.constant = recommendationsCollectionView.frame.height
+        trailerPlayerLayer?.frame = trailerContainerView.bounds
+        trailerWebView?.frame = trailerContainerView.bounds
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -55,6 +63,14 @@ class MovieInfoScreenViewController: BaseViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.setNavigationBarHidden(false, animated: false)
+        trailerVideoPlayer?.pause()
+    }
+    
+    deinit {
+        trailerVideoPlayer?.pause()
+        trailerPlayerLayer?.removeFromSuperlayer()
+        trailerWebView?.stopLoading()
+        trailerWebView?.removeFromSuperview()
     }
     
     // MARK: - Observe
@@ -122,9 +138,20 @@ class MovieInfoScreenViewController: BaseViewController {
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] videos in
                 guard let self else { return }
-                if let videos {
-                    
+                
+                if let youtubeKey = videos?.first(where: { $0.site?.lowercased() == "youtube" && $0.type?.lowercased() == "trailer" })?.key, !youtubeKey.isEmpty {
+                    self.embedYouTube(key: youtubeKey)
+                    return
                 }
+                
+                if let directVideo = videos?.first(where: { ($0.type?.lowercased() == "trailer") && ($0.site?.lowercased() != "youtube") }),
+                   let videoURLString = directVideo.key,
+                   let videoURL = URL(string: videoURLString) {
+                    self.setupTrailerPlayer(with: videoURL)
+                    return
+                }
+                
+                self.showErrorSnackBar(message: "Trailer not found.")
             }).disposed(by: disposeBag)
     }
     
@@ -174,6 +201,37 @@ class MovieInfoScreenViewController: BaseViewController {
         countriesProdLabel.text = "Production Countries: \(movie?.productionCountries?.compactMap({$0.name}).joined(separator: ", ") ?? "-")"
     }
     
+    private func setupTrailerPlayer(with videoURL: URL) {
+        tearDownWebView()
+        
+        if let existingPlayer = trailerVideoPlayer {
+            existingPlayer.replaceCurrentItem(with: AVPlayerItem(url: videoURL))
+            existingPlayer.play()
+        } else {
+            let newPlayer = AVPlayer(url: videoURL)
+            let newPlayerLayer = AVPlayerLayer(player: newPlayer)
+            newPlayerLayer.frame = trailerContainerView.bounds
+            newPlayerLayer.videoGravity = .resizeAspect
+            trailerContainerView.layer.addSublayer(newPlayerLayer)
+            self.trailerVideoPlayer = newPlayer
+            self.trailerPlayerLayer = newPlayerLayer
+            newPlayer.play()
+        }
+    }
+    
+    private func tearDownNativePlayer() {
+        trailerVideoPlayer?.pause()
+        trailerVideoPlayer = nil
+        trailerPlayerLayer?.removeFromSuperlayer()
+        trailerPlayerLayer = nil
+    }
+    
+    private func tearDownWebView() {
+        trailerWebView?.stopLoading()
+        trailerWebView?.removeFromSuperview()
+        trailerWebView = nil
+    }
+    
     private func loadData() {
         guard let viewModel else { return }
         if let id = viewModel.idMovie {
@@ -182,6 +240,28 @@ class MovieInfoScreenViewController: BaseViewController {
             viewModel.getReviews(id: id)
             viewModel.getRecommendations(id: id)
             viewModel.getVideos(id: id)
+        }
+    }
+    
+    private func embedYouTube(key: String) {
+        tearDownNativePlayer()
+        
+        let youtubeWebConfig = WKWebViewConfiguration()
+        youtubeWebConfig.allowsInlineMediaPlayback = true
+        youtubeWebConfig.mediaTypesRequiringUserActionForPlayback = []
+        youtubeWebConfig.allowsPictureInPictureMediaPlayback = true
+        
+        if trailerWebView == nil {
+            let newTrailerWebView = WKWebView(frame: trailerContainerView.bounds, configuration: youtubeWebConfig)
+            newTrailerWebView.backgroundColor = .black
+            newTrailerWebView.isOpaque = false
+            newTrailerWebView.scrollView.isScrollEnabled = false
+            trailerContainerView.addSubview(newTrailerWebView)
+            trailerWebView = newTrailerWebView
+        }
+        
+        if let youtubeURL = URL(string: "https://www.youtube.com/embed/\(key)") {
+            trailerWebView?.load(URLRequest(url: youtubeURL))
         }
     }
     
