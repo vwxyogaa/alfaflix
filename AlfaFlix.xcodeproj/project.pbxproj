@@ -6,6 +6,16 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		C1E68E6C2E45B00D006CD9BD /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = C1E68E6B2E45B00D006CD9BD /* RxCocoa */; };
+		C1E68E6E2E45B00D006CD9BD /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C1E68E6D2E45B00D006CD9BD /* RxSwift */; };
+		C1E68E752E45BA26006CD9BD /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = C1E68E742E45BA26006CD9BD /* Alamofire */; };
+		C1E68E782E45BA34006CD9BD /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = C1E68E772E45BA34006CD9BD /* Kingfisher */; };
+		C1E68E7B2E45BA42006CD9BD /* netfox in Frameworks */ = {isa = PBXBuildFile; productRef = C1E68E7A2E45BA42006CD9BD /* netfox */; };
+		C1FC9CD32E45CBF200A9A6EA /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = C1FC9CD22E45CBF200A9A6EA /* Toast */; };
+		C1FC9CD62E45CC1500A9A6EA /* TTGSnackbar in Frameworks */ = {isa = PBXBuildFile; productRef = C1FC9CD52E45CC1500A9A6EA /* TTGSnackbar */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		C1E68DCB2E44EF2D006CD9BD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -65,6 +75,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1FC9CD32E45CBF200A9A6EA /* Toast in Frameworks */,
+				C1E68E7B2E45BA42006CD9BD /* netfox in Frameworks */,
+				C1FC9CD62E45CC1500A9A6EA /* TTGSnackbar in Frameworks */,
+				C1E68E782E45BA34006CD9BD /* Kingfisher in Frameworks */,
+				C1E68E752E45BA26006CD9BD /* Alamofire in Frameworks */,
+				C1E68E6E2E45B00D006CD9BD /* RxSwift in Frameworks */,
+				C1E68E6C2E45B00D006CD9BD /* RxCocoa in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -125,6 +142,13 @@
 			);
 			name = AlfaFlix;
 			packageProductDependencies = (
+				C1E68E6B2E45B00D006CD9BD /* RxCocoa */,
+				C1E68E6D2E45B00D006CD9BD /* RxSwift */,
+				C1E68E742E45BA26006CD9BD /* Alamofire */,
+				C1E68E772E45BA34006CD9BD /* Kingfisher */,
+				C1E68E7A2E45BA42006CD9BD /* netfox */,
+				C1FC9CD22E45CBF200A9A6EA /* Toast */,
+				C1FC9CD52E45CC1500A9A6EA /* TTGSnackbar */,
 			);
 			productName = AlfaFlix;
 			productReference = C1E68DB42E44EF2B006CD9BD /* AlfaFlix.app */;
@@ -208,6 +232,14 @@
 			);
 			mainGroup = C1E68DAB2E44EF2B006CD9BD;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				C1E68E6A2E45B00D006CD9BD /* XCRemoteSwiftPackageReference "RxSwift" */,
+				C1E68E732E45BA26006CD9BD /* XCRemoteSwiftPackageReference "Alamofire" */,
+				C1E68E762E45BA34006CD9BD /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				C1E68E792E45BA42006CD9BD /* XCRemoteSwiftPackageReference "netfox" */,
+				C1FC9CD12E45CBF200A9A6EA /* XCRemoteSwiftPackageReference "Toast-Swift" */,
+				C1FC9CD42E45CC1500A9A6EA /* XCRemoteSwiftPackageReference "TTGSnackbar" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = C1E68DB52E44EF2B006CD9BD /* Products */;
 			projectDirPath = "";
@@ -295,7 +327,6 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -324,7 +355,6 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -573,6 +603,95 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C1E68E6A2E45B00D006CD9BD /* XCRemoteSwiftPackageReference "RxSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ReactiveX/RxSwift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.9.0;
+			};
+		};
+		C1E68E732E45BA26006CD9BD /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.10.2;
+			};
+		};
+		C1E68E762E45BA34006CD9BD /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.5.0;
+			};
+		};
+		C1E68E792E45BA42006CD9BD /* XCRemoteSwiftPackageReference "netfox" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kasketis/netfox";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.21.0;
+			};
+		};
+		C1FC9CD12E45CBF200A9A6EA /* XCRemoteSwiftPackageReference "Toast-Swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scalessec/Toast-Swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.1.1;
+			};
+		};
+		C1FC9CD42E45CC1500A9A6EA /* XCRemoteSwiftPackageReference "TTGSnackbar" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/zekunyan/TTGSnackbar";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.12.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C1E68E6B2E45B00D006CD9BD /* RxCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C1E68E6A2E45B00D006CD9BD /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxCocoa;
+		};
+		C1E68E6D2E45B00D006CD9BD /* RxSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C1E68E6A2E45B00D006CD9BD /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxSwift;
+		};
+		C1E68E742E45BA26006CD9BD /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C1E68E732E45BA26006CD9BD /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		C1E68E772E45BA34006CD9BD /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C1E68E762E45BA34006CD9BD /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+		C1E68E7A2E45BA42006CD9BD /* netfox */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C1E68E792E45BA42006CD9BD /* XCRemoteSwiftPackageReference "netfox" */;
+			productName = netfox;
+		};
+		C1FC9CD22E45CBF200A9A6EA /* Toast */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C1FC9CD12E45CBF200A9A6EA /* XCRemoteSwiftPackageReference "Toast-Swift" */;
+			productName = Toast;
+		};
+		C1FC9CD52E45CC1500A9A6EA /* TTGSnackbar */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C1FC9CD42E45CC1500A9A6EA /* XCRemoteSwiftPackageReference "TTGSnackbar" */;
+			productName = TTGSnackbar;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C1E68DAC2E44EF2B006CD9BD /* Project object */;
 }
