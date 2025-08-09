@@ -11,8 +11,11 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MainScreenViewController" customModule="AlfaFlix" customModuleProvider="target">
             <connections>
+                <outlet property="noInternetContainerView" destination="Rgi-9a-Nm7" id="8Ik-or-1As"/>
                 <outlet property="nowPlayingCollectionView" destination="UT4-P9-gVA" id="2V9-Uh-eIF"/>
                 <outlet property="popularCollectionView" destination="WX6-7a-cLK" id="Fpl-io-dbO"/>
+                <outlet property="retryButton" destination="0sv-Mp-CfD" id="Vqa-Ce-mV2"/>
+                <outlet property="scrollView" destination="v4k-Uy-9ck" id="ecY-2b-HE9"/>
                 <outlet property="topRatedCollectionView" destination="gbF-j1-iq7" id="n0e-Dg-xLo"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -22,6 +25,47 @@
             <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
+                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rgi-9a-Nm7">
+                    <rect key="frame" x="0.0" y="118" width="393" height="666"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bb5-dS-ajl">
+                            <rect key="frame" x="146.66666666666666" y="259" width="100" height="148"/>
+                            <subviews>
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_no_internet" translatesAutoresizingMaskIntoConstraints="NO" id="ee3-3W-ecd">
+                                    <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="100" id="V5e-hq-UIu"/>
+                                        <constraint firstAttribute="height" constant="100" id="nMq-Jl-rIw"/>
+                                    </constraints>
+                                </imageView>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0sv-Mp-CfD">
+                                    <rect key="frame" x="0.0" y="116" width="100" height="32"/>
+                                    <color key="backgroundColor" name="AlfaGrayDark"/>
+                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="16"/>
+                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                    <state key="normal" title="Retry">
+                                        <color key="titleColor" name="AlfaWhite"/>
+                                    </state>
+                                </button>
+                            </subviews>
+                            <color key="backgroundColor" name="AlfaBlack"/>
+                            <constraints>
+                                <constraint firstAttribute="trailing" secondItem="0sv-Mp-CfD" secondAttribute="trailing" id="0cy-vi-Jzu"/>
+                                <constraint firstAttribute="bottom" secondItem="0sv-Mp-CfD" secondAttribute="bottom" id="3GC-Mv-EyH"/>
+                                <constraint firstItem="ee3-3W-ecd" firstAttribute="leading" secondItem="Bb5-dS-ajl" secondAttribute="leading" id="Qvq-eG-2mF"/>
+                                <constraint firstAttribute="trailing" secondItem="ee3-3W-ecd" secondAttribute="trailing" id="fbI-2N-fGJ"/>
+                                <constraint firstItem="ee3-3W-ecd" firstAttribute="top" secondItem="Bb5-dS-ajl" secondAttribute="top" id="jFd-DC-Rq5"/>
+                                <constraint firstItem="0sv-Mp-CfD" firstAttribute="top" secondItem="ee3-3W-ecd" secondAttribute="bottom" constant="16" id="m4U-RU-s6T"/>
+                                <constraint firstItem="0sv-Mp-CfD" firstAttribute="leading" secondItem="Bb5-dS-ajl" secondAttribute="leading" id="uyu-Qn-wls"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" name="AlfaBlack"/>
+                    <constraints>
+                        <constraint firstItem="Bb5-dS-ajl" firstAttribute="centerY" secondItem="Rgi-9a-Nm7" secondAttribute="centerY" id="HeX-Dy-eRc"/>
+                        <constraint firstItem="Bb5-dS-ajl" firstAttribute="centerX" secondItem="Rgi-9a-Nm7" secondAttribute="centerX" id="X7u-RL-6qe"/>
+                    </constraints>
+                </view>
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" keyboardDismissMode="onDrag" translatesAutoresizingMaskIntoConstraints="NO" id="v4k-Uy-9ck">
                     <rect key="frame" x="0.0" y="118" width="393" height="666"/>
                     <subviews>
@@ -104,17 +148,25 @@
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <color key="backgroundColor" name="AlfaBlack"/>
             <constraints>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="Rgi-9a-Nm7" secondAttribute="bottom" id="0fG-Ru-n2I"/>
+                <constraint firstItem="Rgi-9a-Nm7" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="4wj-1x-bEz"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="v4k-Uy-9ck" secondAttribute="bottom" id="AWE-lG-yGP"/>
                 <constraint firstItem="v4k-Uy-9ck" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="FOR-Vh-qHn"/>
                 <constraint firstItem="v4k-Uy-9ck" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="Kx2-zt-xCZ"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="Rgi-9a-Nm7" secondAttribute="trailing" id="NG4-a8-FNZ"/>
                 <constraint firstItem="v4k-Uy-9ck" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="fGp-0d-Y2M"/>
+                <constraint firstItem="Rgi-9a-Nm7" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="uCL-7c-zH6"/>
             </constraints>
             <point key="canvasLocation" x="-22" y="20"/>
         </view>
     </objects>
     <resources>
+        <image name="icon_no_internet" width="100" height="100"/>
         <namedColor name="AlfaBlack">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="AlfaGrayDark">
+            <color red="0.16470588235294117" green="0.16470588235294117" blue="0.16470588235294117" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="AlfaWhite">
             <color red="0.99607843137254903" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

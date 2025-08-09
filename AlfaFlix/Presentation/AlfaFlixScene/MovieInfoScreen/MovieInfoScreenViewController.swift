@@ -28,6 +28,8 @@ class MovieInfoScreenViewController: BaseViewController {
     @IBOutlet weak var reviewsCollectionView: UICollectionView!
     @IBOutlet weak var recommendationsStackView: UIStackView!
     @IBOutlet weak var recommendationsCollectionView: UICollectionView!
+    @IBOutlet weak var noInternetContainerView: UIView!
+    @IBOutlet weak var retryButton: UIButton!
     
     // MARK: - Properties
     private let disposeBag = DisposeBag()
@@ -155,6 +157,9 @@ class MovieInfoScreenViewController: BaseViewController {
     private func configureViews() {
         configureButton()
         configureCollectionView()
+        retryButton.addTarget(self, action: #selector(retryButtonTapped), for: .touchUpInside)
+        retryButton.layer.cornerRadius = 8
+        retryButton.layer.masksToBounds = true
     }
     
     private func configureButton() {
@@ -231,7 +236,17 @@ class MovieInfoScreenViewController: BaseViewController {
     private func loadData() {
         guard let viewModel = viewModel,
               let idMovie = viewModel.idMovie else { return }
-        viewModel.loadAll(id: idMovie)
+        if Reachability.isConnectedToNetwork() {
+            noInternetContainerView.isHidden = true
+            containerView.isHidden = false
+            closeButton.isHidden = false
+            viewModel.loadAll(id: idMovie)
+        } else {
+            noInternetContainerView.isHidden = false
+            containerView.isHidden = true
+            closeButton.isHidden = true
+            showErrorSnackBar(message: "No internet connection")
+        }
     }
     
     private func embedYouTube(key: String) {
@@ -260,6 +275,11 @@ class MovieInfoScreenViewController: BaseViewController {
     @objc
     private func closeButtonTapped() {
         navigationController?.popViewController(animated: true)
+    }
+    
+    @objc
+    private func retryButtonTapped() {
+        loadData()
     }
 }
 

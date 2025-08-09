@@ -10,9 +10,12 @@ import RxSwift
 
 class MainScreenViewController: BaseViewController {
     // MARK: - IBOutlets
+    @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var nowPlayingCollectionView: UICollectionView!
     @IBOutlet weak var popularCollectionView: UICollectionView!
     @IBOutlet weak var topRatedCollectionView: UICollectionView!
+    @IBOutlet weak var noInternetContainerView: UIView!
+    @IBOutlet weak var retryButton: UIButton!
     
     // MARK: Properties
     private let disposeBag = DisposeBag()
@@ -111,11 +114,22 @@ class MainScreenViewController: BaseViewController {
     // MARK: - Methods
     private func configureViews() {
         configureCollectionViews()
+        retryButton.addTarget(self, action: #selector(retryButtonTapped), for: .touchUpInside)
+        retryButton.layer.cornerRadius = 8
+        retryButton.layer.masksToBounds = true
     }
     
     private func loadData() {
         guard let viewModel else { return }
-        viewModel.resetAndLoadFirstPages()
+        if Reachability.isConnectedToNetwork() {
+            noInternetContainerView.isHidden = true
+            scrollView.isHidden = false
+            viewModel.resetAndLoadFirstPages()
+        } else {
+            noInternetContainerView.isHidden = false
+            scrollView.isHidden = true
+            showErrorSnackBar(message: "No internet connection")
+        }
     }
     
     private func configureCollectionViews() {
@@ -130,6 +144,12 @@ class MainScreenViewController: BaseViewController {
         topRatedCollectionView.register(CardMovieCollectionViewCell.nib, forCellWithReuseIdentifier: CardMovieCollectionViewCell.identifier)
         topRatedCollectionView.dataSource = self
         topRatedCollectionView.delegate = self
+    }
+    
+    // MARK: - Actions
+    @objc
+    private func retryButtonTapped() {
+        loadData()
     }
 }
 
@@ -222,6 +242,13 @@ extension MainScreenViewController: UICollectionViewDataSource, UICollectionView
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard let viewModel = viewModel else { return }
         let threshold = 2
+        guard Reachability.isConnectedToNetwork() else {
+            noInternetContainerView.isHidden = false
+            scrollView.isHidden = true
+            showErrorSnackBar(message: "No internet connection")
+            return
+        }
+        
         switch collectionView {
         case nowPlayingCollectionView:
             let total = viewModel.nowPlayingResults.count
